@@ -1,6 +1,6 @@
 {
   "name": "dapp",
-  "source": "src/index.html",
+  "source": "src/task.html",
   "scripts": {
     "start": "parcel",
     "build": "parcel build"
