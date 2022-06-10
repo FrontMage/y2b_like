@@ -5,24 +5,14 @@ import "antd/dist/antd.css";
 
 const apiEntry = "http://localhost:8000";
 
+let timer = null;
+
 const App = () => {
   const [account, setAccount] = useState("No account");
   const [dailyEarnings, setDailyEarnings] = useState(0);
   const [tasks, setTasks] = useState([]);
-  setInterval(() => {
-    fetch(`${apiEntry}/tasks`, {
-      mode: "cors",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTasks(data);
-      })
-      .catch((e) => {
-        console.error(e);
-        message.error("Failed to get account info");
-      });
-  }, 60 * 1000);
   useEffect(() => {
+    // Get once immediately
     fetch(`${apiEntry}/tasks`, {
       mode: "cors",
     })
@@ -34,6 +24,22 @@ const App = () => {
         console.error(e);
         message.error("Failed to get account info");
       });
+    // Get every 60s
+    if (!timer) {
+      timer = setInterval(() => {
+        fetch(`${apiEntry}/tasks`, {
+          mode: "cors",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setTasks(data);
+          })
+          .catch((e) => {
+            console.error(e);
+            message.error("Failed to get account info");
+          });
+      }, 60 * 1000);
+    }
     fetch(`${apiEntry}/work_proof`, {
       mode: "cors",
     })
@@ -78,10 +84,17 @@ const App = () => {
       <Divider></Divider>
       {tasks.map((task) => {
         return (
-          <Row gutter={[16, 16]} style={{ marginTop: "20px" }}>
+          <Row
+            gutter={[16, 16]}
+            style={{ marginTop: "20px" }}
+            key={task["task_id"]}
+          >
             <Col span={4}></Col>
             <Col span={8}>
-              <Card title={task["image_url"]} bordered={true}>
+              <Card
+                title={`${task["task_id"]} ${task["image_url"]}`}
+                bordered={true}
+              >
                 <Statistic title="Params" value={task["args"]}></Statistic>
                 <Statistic title="Reward" value={"1 Work proof"}></Statistic>
                 {task["image_url"].lastIndexOf(
