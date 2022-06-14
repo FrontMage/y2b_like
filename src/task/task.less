@@ -1,0 +1,78 @@
+
+body {
+  background-color: #2c3e50!important;
+}
+
+#root {
+  overflow-x: hidden;
+}
+
+.header {
+  height: 120px;
+  display: flex;
+  padding: 0 30px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2980b9;
+  box-shadow: 0 10px 10px #333;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  .logoBox {
+    font-size: 50px;
+    color: #fff;
+  }
+  .taskInfoBox {
+    color: #fff;
+    font-size: 16px;
+    .taskInfoTitle {
+      color: #000
+    }
+    .taskInfoValue {
+      text-align: center;
+    }
+  }
+}
+.mainContainer {
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  .taskItemBox {
+    width: 30%;
+    .ant-card-head {
+      background-color: #ecf0f1;
+    }
+  }
+}
+.taskItemBox {
+  margin-bottom: 25px;
+}
+.cardTitleBox {
+  display: flex;
+  justify-content: space-between;
+  color: #2c3e50;
+  font-size: 20px;
+}
+.taskContentBox {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  margin: 5px 0;
+}
+.btnBox {
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 800px) {
+  .header {
+    flex-direction: column;
+    height: 240px;
+    padding: 30px;
+  }
+  .mainContainer {
+    .taskItemBox {
+      width: 100%;
+    }
+  }
+  
+}
+

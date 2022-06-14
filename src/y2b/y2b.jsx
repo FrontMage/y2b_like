@@ -1,9 +1,11 @@
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { abi } from "./abi";
+import { abi } from "../abi/abi";
 import React, { useState } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
+const container = document.getElementById("root");
+const root = createRoot(container);
 import {
   Space,
   Input,
@@ -86,65 +88,70 @@ const App = () => {
   const [y2bLikeCount, setY2bLikeCount] = useState(1);
   return (
     <div>
-      <Divider>Get your Youtube video more likes</Divider>
-      <Row gutter={[16, 16]}>
-        <Col span={6}></Col>
-        <Col span={6}>
-          <Space align="center" size="large">
-            <div>{account}</div>
-          </Space>
-        </Col>
-        <Col span={6}>
-          <Space align="center">
+      <header className="header">
+        <div className="logoBox">Get your Youtube video more likes</div>
+      </header>
+      <main className="mainContainer">
+        <div className="mainBox">
+          <div className="mainRow">
+            <div className="rowItem">{account}</div>
+            <div className="rowItem">
+              <Button
+                ghost
+                type="primary"
+                onClick={async () => {
+                  const web3Instance = await connectWallet();
+                  setWeb3(web3Instance);
+                  const accounts = await web3Instance.eth.getAccounts();
+                  setAccount(`Connected: ${accounts[0]}`);
+                }}
+              >
+                Connect to wallet
+              </Button>
+            </div>
+          </div>
+
+          <Divider></Divider>
+          <div className="contentRow">
+            <Input
+              allowClear={true}
+              placeholder={"Youtube video id"}
+              onChange={(value) => {
+                setY2bVid(value);
+              }}
+              size="large"
+            ></Input>
+          </div>
+          <div className="contentRow">
+            <span style={{marginRight: 20}}>Count:</span>
+            
+            <InputNumber
+              defaultValue={1}
+              min={1}
+              onChange={(value) => {
+                setY2bLikeCount(value);
+              }}
+            ></InputNumber>
+          </div>
+          <div className="contentRow">
             <Button
+              block
+              size="large"
+              shape="round"
+              disabled={account == "Wallet not connected"}
               type="primary"
               onClick={async () => {
-                const web3Instance = await connectWallet();
-                setWeb3(web3Instance);
-                const accounts = await web3Instance.eth.getAccounts();
-                setAccount(`Connected: ${accounts[0]}`);
+                await publishY2bTask(web3, y2bVid, y2bLikeCount);
               }}
             >
-              Connect to wallet
+              Get likes!
             </Button>
-          </Space>
-        </Col>
-        <Col span={6}></Col>
-      </Row>
-      <Divider></Divider>
-      <Row gutter={[16, 16]}>
-        <Col span={6} offset={6}>
-          <Input
-            allowClear={true}
-            placeholder={"Youtube video id"}
-            onChange={(e) => {
-              setY2bVid(e.target.value);
-            }}
-          ></Input>
-        </Col>
-        <Col span={3}>
-          <InputNumber
-            defaultValue={1}
-            min={1}
-            onChange={(e) => {
-              setY2bLikeCount(parseInt(e.target.value));
-            }}
-          ></InputNumber>
-        </Col>
-        <Col span={6}>
-          <Button
-            disabled={account == "Wallet not connected"}
-            type="primary"
-            onClick={async () => {
-              await publishY2bTask(web3, y2bVid, y2bLikeCount);
-            }}
-          >
-            Get likes!
-          </Button>
-        </Col>
-      </Row>
+          </div>
+        </div>
+      </main>
+      
     </div>
   );
 };
 
-render(<App />, document.getElementById("root"));
+root.render(<App />);
