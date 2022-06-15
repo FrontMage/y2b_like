@@ -6,16 +6,7 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 const container = document.getElementById("root");
 const root = createRoot(container);
-import {
-  Space,
-  Input,
-  Button,
-  message,
-  InputNumber,
-  Row,
-  Col,
-  Divider,
-} from "antd";
+import { Input, Button, message, InputNumber, Divider } from "antd";
 import "antd/dist/antd.css";
 
 const providerOptions = {
@@ -47,10 +38,10 @@ async function publishY2bTask(web3, tiktokURL, taskCount) {
   const accounts = await web3.eth.getAccounts();
   const contract = new web3.eth.Contract(
     abi,
-    "0xcEEF423825F019e768Ecf5da059ae87848df91b4"
+    "0xf80A1815eAFcEda29a38c384262f2e2971AE7b94"
   );
   try {
-    const job = contract.methods.publishTask(
+    const job = contract.methods.nNodespecifiedAddressTask(
       "shan3275/puppeteer-headful:latest",
       `--tiktok --url ${tiktokURL}`,
       taskCount,
@@ -69,12 +60,9 @@ async function publishY2bTask(web3, tiktokURL, taskCount) {
       })
       .on("transactionHash", (tx) => {
         message.loading(`Tx submitted: ${tx}`);
-      })
-      .on("receipt", (receipt) => {
-        message.loading(`Reciept got: ${receipt}`);
       });
     message.info(
-      `Successfully published task: ${result.events.TaskPublished.returnValues.TaskId}`
+      `Successfully published task: ${result.events.TaskPublished.returnValues.taskId}`
     );
   } catch (e) {
     console.log(e);
@@ -123,8 +111,8 @@ const App = () => {
             ></Input>
           </div>
           <div className="contentRow">
-            <span style={{marginRight: 20}}>Count:</span>
-            
+            <span style={{ marginRight: 20 }}>Count:</span>
+
             <InputNumber
               defaultValue={1}
               min={1}

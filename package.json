@@ -1,14 +1,16 @@
 {
   "name": "dapp",
-  "source": "src/task/task.html",
+  "source": "src/y2b/y2b.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "start": "parcel",
     "build": "parcel build"
   },
   "dependencies": {
+    "@parcel/config-default": "^2.6.0",
     "@walletconnect/web3-provider": "^1.7.8",
     "antd": "^4.20.7",
+    "parcel": "^2.6.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "web3": "^1.7.3",

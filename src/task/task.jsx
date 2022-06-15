@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
-import { Button, message, Row, Col, Divider, Statistic, Card } from "antd";
+import { Button, message, Card } from "antd";
 import "antd/dist/antd.css";
 
 const apiEntry = "http://shan.i234.me:8000/";
@@ -119,7 +119,9 @@ const App = () => {
                       Extra interaction required
                     </Button>
                   ) : (
-                    <Button ghost type="primary" block>Auto race for complete</Button>
+                    <Button ghost type="primary" block>
+                      Auto race for complete
+                    </Button>
                   )}
                 </div>
               </Card>
