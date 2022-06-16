@@ -127,15 +127,21 @@ export const abi = [
         indexed: false,
       },
       {
-        type: "uint64",
+        type: "uint256",
         name: "maxRunNum",
-        internalType: "uint64",
+        internalType: "uint256",
         indexed: false,
       },
       {
         type: "address[]",
         name: "receivers",
         internalType: "address[]",
+        indexed: false,
+      },
+      {
+        type: "uint64",
+        name: "maintainBlocks",
+        internalType: "uint64",
         indexed: false,
       },
     ],
@@ -149,6 +155,31 @@ export const abi = [
         type: "string",
         name: "version",
         internalType: "string",
+        indexed: false,
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "addTaskDuration",
+    inputs: [
+      {
+        type: "address",
+        name: "optionUser",
+        internalType: "address",
+        indexed: false,
+      },
+      {
+        type: "uint64",
+        name: "taskId",
+        internalType: "uint64",
+        indexed: false,
+      },
+      {
+        type: "uint64",
+        name: "maintainExtraBlocks",
+        internalType: "uint64",
         indexed: false,
       },
     ],
@@ -173,6 +204,20 @@ export const abi = [
     stateMutability: "view",
     outputs: [{ type: "bytes32", name: "", internalType: "bytes32" }],
     name: "UPDATER_ROLE",
+    inputs: [],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "bool", name: "", internalType: "bool" }],
+    name: "addressWhitelist",
+    inputs: [{ type: "address", name: "", internalType: "address" }],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
+    name: "blockUintPrice",
     inputs: [],
   },
   {
@@ -205,16 +250,6 @@ export const abi = [
   },
   {
     type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "fullNodeTask",
-    inputs: [
-      { type: "string", name: "url", internalType: "string" },
-      { type: "string", name: "options", internalType: "string" },
-    ],
-  },
-  {
-    type: "function",
     stateMutability: "view",
     outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
     name: "getCurrenTime",
@@ -226,27 +261,6 @@ export const abi = [
     outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
     name: "getCurrentDay",
     inputs: [],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "getMyContributionForDay",
-    inputs: [{ type: "uint64", name: "theDay", internalType: "uint64" }],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "getMyRewardForDay",
-    inputs: [{ type: "uint64", name: "theDay", internalType: "uint64" }],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "uint64", name: "_day", internalType: "uint64" }],
-    name: "getRewardPoint",
-    inputs: [{ type: "address", name: "_user", internalType: "address" }],
   },
   {
     type: "function",
@@ -275,19 +289,23 @@ export const abi = [
   {
     type: "function",
     stateMutability: "view",
-    outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "getTotalRewardForDay",
-    inputs: [{ type: "uint64", name: "theDay", internalType: "uint64" }],
+    outputs: [{ type: "bool", name: "", internalType: "bool" }],
+    name: "getSubIndexForTask",
+    inputs: [{ type: "uint64", name: "taskId", internalType: "uint64" }],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
+    name: "getTaskRemainingTime",
+    inputs: [{ type: "uint64", name: "taskId", internalType: "uint64" }],
   },
   {
     type: "function",
     stateMutability: "view",
     outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
-    name: "getUserContributionForDay",
-    inputs: [
-      { type: "address", name: "user", internalType: "address" },
-      { type: "uint64", name: "theDay", internalType: "uint64" },
-    ],
+    name: "getTotalRewardForDay",
+    inputs: [{ type: "uint64", name: "theDay", internalType: "uint64" }],
   },
   {
     type: "function",
@@ -298,6 +316,13 @@ export const abi = [
       { type: "address", name: "user", internalType: "address" },
       { type: "uint64", name: "theDay", internalType: "uint64" },
     ],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
+    name: "getUserRewardPointer",
+    inputs: [{ type: "address", name: "_user", internalType: "address" }],
   },
   {
     type: "function",
@@ -328,6 +353,16 @@ export const abi = [
   },
   {
     type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "increaseTaskDuration",
+    inputs: [
+      { type: "uint64", name: "taskId", internalType: "uint64" },
+      { type: "uint64", name: "maintainExtraBlocks", internalType: "uint64" },
+    ],
+  },
+  {
+    type: "function",
     stateMutability: "view",
     outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
     name: "initRunNum",
@@ -342,6 +377,7 @@ export const abi = [
       { type: "string", name: "url", internalType: "string" },
       { type: "string", name: "options", internalType: "string" },
       { type: "uint64", name: "maxRunNum", internalType: "uint64" },
+      { type: "uint64", name: "maintainBlocks", internalType: "uint64" },
     ],
   },
   {
@@ -354,6 +390,7 @@ export const abi = [
       { type: "string", name: "options", internalType: "string" },
       { type: "uint64", name: "maxRunNum", internalType: "uint64" },
       { type: "address[]", name: "receivers", internalType: "address[]" },
+      { type: "uint64", name: "maintainBlocks", internalType: "uint64" },
     ],
   },
   {
@@ -386,13 +423,6 @@ export const abi = [
   },
   {
     type: "function",
-    stateMutability: "view",
-    outputs: [{ type: "bool", name: "", internalType: "bool" }],
-    name: "readSubIndexForTask",
-    inputs: [{ type: "uint64", name: "taskId", internalType: "uint64" }],
-  },
-  {
-    type: "function",
     stateMutability: "nonpayable",
     outputs: [],
     name: "renounceRole",
@@ -418,6 +448,25 @@ export const abi = [
     inputs: [
       { type: "bytes32", name: "role", internalType: "bytes32" },
       { type: "address", name: "account", internalType: "address" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "setAddressWhitelist",
+    inputs: [
+      { type: "address", name: "_permissionAddress", internalType: "address" },
+      { type: "bool", name: "_authorization", internalType: "bool" },
+    ],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "setBlockUnitPrice",
+    inputs: [
+      { type: "uint64", name: "_blockUnitPrice", internalType: "uint64" },
     ],
   },
   {
@@ -479,7 +528,9 @@ export const abi = [
       { type: "uint64", name: "maxRunNum", internalType: "uint64" },
       { type: "uint64", name: "startTime", internalType: "uint64" },
       { type: "uint64", name: "currentRunningNum", internalType: "uint64" },
-      { type: "uint256", name: "units", internalType: "uint256" },
+      { type: "uint64", name: "maintainBlocks", internalType: "uint64" },
+      { type: "uint256", name: "taskProof", internalType: "uint256" },
+      { type: "uint256", name: "taskUintProof", internalType: "uint256" },
     ],
     name: "taskInfo",
     inputs: [{ type: "uint64", name: "", internalType: "uint64" }],
@@ -511,19 +562,19 @@ export const abi = [
   {
     type: "function",
     stateMutability: "view",
-    outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
-    name: "userCheckPoint",
-    inputs: [{ type: "address", name: "", internalType: "address" }],
-  },
-  {
-    type: "function",
-    stateMutability: "view",
     outputs: [{ type: "uint256", name: "", internalType: "uint256" }],
     name: "userDayReward",
     inputs: [
       { type: "address", name: "", internalType: "address" },
       { type: "uint64", name: "", internalType: "uint64" },
     ],
+  },
+  {
+    type: "function",
+    stateMutability: "view",
+    outputs: [{ type: "uint64", name: "", internalType: "uint64" }],
+    name: "userRewardPoint",
+    inputs: [{ type: "address", name: "", internalType: "address" }],
   },
   {
     type: "function",
@@ -551,12 +602,5 @@ export const abi = [
       { type: "address", name: "", internalType: "address" },
       { type: "uint64", name: "", internalType: "uint64" },
     ],
-  },
-  {
-    type: "function",
-    stateMutability: "nonpayable",
-    outputs: [],
-    name: "withdrawFund",
-    inputs: [],
   },
 ];

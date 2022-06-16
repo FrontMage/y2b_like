@@ -38,7 +38,7 @@ async function publishY2bTask(web3, videoId, taskCount) {
   const accounts = await web3.eth.getAccounts();
   const contract = new web3.eth.Contract(
     abi,
-    "0xf80A1815eAFcEda29a38c384262f2e2971AE7b94"
+    "0x60eF94dbbe8E80024Eff0693976Be26d27aEA746"
   );
   try {
     const job = contract.methods.nNodespecifiedAddressTask(
